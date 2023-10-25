@@ -2,10 +2,10 @@ import React from "react";
 
 import "./Card.css";
 
-const Card = ({ user }) => {
+const Card = ({ users }) => {
   return (
     <div className="card">
-      <p>{user}</p>
+      <p>{users}</p>
     </div>
   );
 };
