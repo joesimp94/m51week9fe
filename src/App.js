@@ -10,21 +10,15 @@ import CardContainer from "./components/cards/cardContainer/CardContainer";
 function App() {
   const [users, setUsers] = useState([]);
 
-  const getUsers = async () => {
-    try {
-      const response = await fetch(`http://localhost:5001/user`);
-      if (response.ok) {
-        const data = await response.json();
-        setUsers(data);
-      } else {
-        console.error("Failed to fetch users.");
-      }
-    } catch (error) {
-      console.log("Error fetching users.", error);
-    }
-  };
-
   useEffect(() => {
+    async function getUsers() {
+      const response = await fetch(`http://localhost:5001/user`);
+      const data = await response.json();
+      console.log(data);
+      await setUsers(data.users);
+      console.log(users);
+    }
+
     getUsers();
   }, []);
 
