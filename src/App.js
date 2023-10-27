@@ -6,27 +6,45 @@ import Header from "./components/layout/header/Header";
 import Footer from "./components/layout/footer/Footer";
 import UserContainer from "./components/user/userContainer/UserContainer";
 import CardContainer from "./components/cards/cardContainer/CardContainer";
+import { authCheck } from "./utils";
+import { getTokenFromCookie } from "./common";
 
 function App() {
   const [users, setUsers] = useState([]);
+  const [user, setUser] = useState({
+    username: null,
+    email: null,
+    token: null,
+  });
 
   useEffect(() => {
-    async function getUsers() {
-      const response = await fetch(`http://localhost:5001/user`);
-      const data = await response.json();
-      console.log(data);
-      await setUsers(data.users);
-      console.log(users);
+    console.log("Hello from use effect");
+    if (document.cookie) {
+      console.log(document.cookie);
+      let token = getTokenFromCookie("jwt_token");
+      console.log("use effect token", token);
+      if (token === false) {
+        setUser({
+          username: null,
+          email: null,
+          token: null,
+        });
+      } else {
+        loginWithToken(token, setUser);
+      }
     }
-
-    getUsers();
   }, []);
+
+  const loginWithToken = async (token, setUser) => {
+    const persistentUser = await authCheck(token);
+    await setUser(persistentUser);
+  };
 
   return (
     <div className="App">
-      <Header />
+      <Header user={user} />
       <CardContainer users={users} />
-      <UserContainer users={users} />
+      <UserContainer user={user} setUser={setUser} setUsers={setUsers} />
       <Footer />
     </div>
   );

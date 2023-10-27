@@ -5,7 +5,7 @@ import "./Login.css";
 
 import { loginUser } from "../../../utils";
 
-const Login = () => {
+const Login = ({ user, setUser }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -15,8 +15,10 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const oldUser = await loginUser(username, password);
+    const loggedUser = await loginUser(username, password);
+    console.log(loggedUser);
+    await setUser(loggedUser);
+    console.log(user);
   };
 
   return (
